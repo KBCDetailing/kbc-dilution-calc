@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KBC Dilution Calculator</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f4f4f4;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+
+  .logo {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .logo-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0374B6;
+    letter-spacing: 1px;
+  }
+
+  .logo-sub {
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 1.25rem 0;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  input[type="number"] {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 18px;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+    color: #222;
+    background: #fafafa;
+  }
+
+  input[type="number"]:focus {
+    border-color: #0374B6;
+    background: #fff;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .unit-group {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .unit-btn {
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .unit-btn.active {
+    background: #0374B6;
+    border-color: #0374B6;
+    color: #fff;
+  }
+
+  .unit-btn:active {
+    transform: scale(0.97);
+  }
+
+  .results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .result-box {
+    background: #f0f7fd;
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+  }
+
+  .result-label {
+    font-size: 12px;
+    color: #0374B6;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .result-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0374B6;
+    line-height: 1;
+  }
+
+  .result-unit {
+    font-size: 14px;
+    color: #0374B6;
+    margin-top: 4px;
+    opacity: 0.7;
+  }
+
+  .tip-box {
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    font-size: 13px;
+    color: #555;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .tip-box strong {
+    color: #222;
+  }
+
+  .quick-section {
+    margin-top: 1.5rem;
+  }
+
+  .quick-label {
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .quick-btn {
+    padding: 10px 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .quick-btn:hover {
+    border-color: #0374B6;
+    color: #0374B6;
+    background: #f0f7fd;
+  }
+
+  .quick-btn:active {
+    transform: scale(0.97);
+  }
+
+  .quick-name {
+    font-size: 10px;
+    color: #999;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <div class="logo-text">KBC AUTO DETAILING</div>
+    <div class="logo-sub">Dilution Calculator</div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="row">
+    <div>
+      <label>Ratio (1 : X)</label>
+      <input type="number" id="ratio" value="5" min="1" step="1" inputmode="numeric" />
+    </div>
+    <div>
+      <label>Container size</label>
+      <input type="number" id="volume" value="32" min="1" step="1" inputmode="decimal" />
+    </div>
+  </div>
+
+  <label>Unit</label>
+  <div class="unit-group">
+    <button class="unit-btn active" onclick="setUnit('oz')">oz</button>
+    <button class="unit-btn" onclick="setUnit('ml')">ml</button>
+    <button class="unit-btn" onclick="setUnit('L')">L</button>
+    <button class="unit-btn" onclick="setUnit('gal')">gal</button>
+  </div>
+
+  <div class="results">
+    <div class="result-box">
+      <div class="result-label">Product</div>
+      <div class="result-value" id="product-out">5.3</div>
+      <div class="result-unit" id="product-unit">oz</div>
+    </div>
+    <div class="result-box">
+      <div class="result-label">Water</div>
+      <div class="result-value" id="water-out">26.7</div>
+      <div class="result-unit" id="water-unit">oz</div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    Add <strong id="tip-product">5.3 oz</strong> of product first,<br>then fill to <strong id="tip-total">32 oz</strong> with water.
+  </div>
+
+  <div class="quick-section">
+    <div class="quick-label">Quick select — common ratios</div>
+    <div class="quick-grid">
+      <button class="quick-btn" onclick="setRatio(4)">1:4<div class="quick-name">Wheel Acid</div></button>
+      <button class="quick-btn" onclick="setRatio(5)">1:5<div class="quick-name">Dark Fury / Pre-Soak</div></button>
+      <button class="quick-btn" onclick="setRatio(6)">1:6<div class="quick-name">Carpet Bomber / DS2</div></button>
+      <button class="quick-btn" onclick="setRatio(8)">1:8<div class="quick-name">Super Soap bulk</div></button>
+      <button class="quick-btn" onclick="setRatio(10)">1:10<div class="quick-name">APC / Mega Foam</div></button>
+      <button class="quick-btn" onclick="setRatio(4)">1:4<div class="quick-name">Encap-Punch</div></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let unit = 'oz';
+
+  function setUnit(u) {
+    unit = u;
+    document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    calc();
+  }
+
+  function setRatio(r) {
+    document.getElementById('ratio').value = r;
+    calc();
+  }
+
+  function fmt(n) {
+    if (n >= 100) return Math.round(n).toString();
+    return parseFloat(n.toFixed(1)).toString();
+  }
+
+  function calc() {
+    const ratio = parseFloat(document.getElementById('ratio').value) || 1;
+    const vol = parseFloat(document.getElementById('volume').value) || 0;
+    const product = vol / (ratio + 1);
+    const water = vol - product;
+
+    document.getElementById('product-out').textContent = fmt(product);
+    document.getElementById('water-out').textContent = fmt(water);
+    document.getElementById('product-unit').textContent = unit;
+    document.getElementById('water-unit').textContent = unit;
+    document.getElementById('tip-product').textContent = fmt(product) + ' ' + unit;
+    document.getElementById('tip-total').textContent = fmt(vol) + ' ' + unit;
+  }
+
+  document.getElementById('ratio').addEventListener('input', calc);
+  document.getElementById('volume').addEventListener('input', calc);
+  calc();
+</script>
+
+</body>
+</html>
